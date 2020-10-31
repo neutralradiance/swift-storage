@@ -26,7 +26,7 @@ struct Article: JSONCodable, Cacheable {
 }
 
 /// Conformance to `Infallible` to make it easier to unwrap values from `UserDefaults`
-/// (especially useful when  for offline testing.)
+/// (especially useful when offline or generating random data)
 extension Article: Infallible {
     static var defaultValue: Article {
         Article(id: UUID(),
