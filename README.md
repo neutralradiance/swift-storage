@@ -1,6 +1,6 @@
 # Storage
 
-A set of easy and simple to use persistence property wrappers for for `Codable` objects . 
+A set of easy and simple to use persistence property wrappers for `Codable` objects . 
 Storage allows you to cache objects using universally unique identifiers (UUIDs) and also encode and decode into `UserDefaults` with the use of property wrappers.  
 
 ### Stating Conformance
@@ -26,7 +26,7 @@ struct Article: JSONCodable, Cacheable {
 }
 
 /// Conformance to `Infallible` to make it easier to unwrap values from `UserDefaults`
-/// (especially useful when  for offline testing.)
+/// (especially useful when offline or generating random data)
 extension Article: Infallible {
     static var defaultValue: Article {
         Article(id: UUID(),
