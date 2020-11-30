@@ -7,8 +7,7 @@
 
 import Foundation
 
-public protocol BaseCache {
-    associatedtype Value
+public protocol BaseCache: BaseStorage {
     static var key: String { get }
     init()
 }
@@ -41,7 +40,8 @@ extension BaseCache {
             .contentsOfDirectory(at: folder(createIfNeeded: true),
                                  includingPropertiesForKeys: nil,
                                  options: [.skipsHiddenFiles,
-                                           .skipsSubdirectoryDescendants])
+                                           .skipsSubdirectoryDescendants,
+                                           .skipsPackageDescendants])
 
     }
     public static func clear() throws {

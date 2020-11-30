@@ -12,6 +12,7 @@ import AppKit
 #endif
 import Combine
 
+#if os(iOS)
 /// Decoder for an image that decodes data that can be encoded by `ImageEncoder`
 /// Uses `JSONDecoder` to decode base64 data for images and provide extra data.
 public class ImageDecoder: TopLevelDecoder {
@@ -96,3 +97,4 @@ public extension ImageEncoder {
     #endif
 
 }
+#endif

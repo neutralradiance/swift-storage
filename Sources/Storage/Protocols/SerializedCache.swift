@@ -7,11 +7,11 @@
 
 import Foundation
 
-/// An object that conforms to `Identifiable` & `CustomCodable`.
-public typealias Cacheable = Identifiable & CustomCodable
+/// An object that conforms to `Identifiable` & `AutoCodable`.
+public typealias Cacheable = Identifiable & AutoCodable
 
 public protocol SerializedCache: BaseCache where Value: Cacheable, Value.ID == UUID,
-                                                 Value.Decoder.Input == Data, Value.Encoder.Output == Data {
+                                                 Value.AutoDecoder.Input == Data, Value.AutoEncoder.Output == Data {
     static subscript (id: Value.ID) -> Value? { get set }
 }
 

@@ -12,9 +12,6 @@ public protocol DefaultsWrapper: DynamicProperty {
     associatedtype Value
     var store: UserDefaults { get set }
     var key: String { get }
-    var wrappedValue: Value { get set }
-    var projectedValue: Binding<Value> { get }
-    init(wrappedValue: Value, _ key: String, store: UserDefaults?)
 }
 
 extension DefaultsWrapper {

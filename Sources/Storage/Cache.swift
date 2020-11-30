@@ -12,9 +12,10 @@ import SwiftUI
 /// - parameter : `Value` for caching
 /// - parameter : `wrappedValue: [Value]` the initial components to be cached
 @propertyWrapper
-public struct Cache<Value: Cacheable>: SerializedCache & CacheWrapper where Value.ID == UUID,
-                                                                            Value.Decoder.Input == Data,
-                                                                            Value.Encoder.Output == Data {
+public struct Cache<Value: Cacheable>:
+    SerializedCache & CacheWrapper where Value.ID == UUID,
+                                         Value.AutoDecoder.Input == Data,
+                                         Value.AutoEncoder.Output == Data {
 
     public var wrappedValue: [Value] {
         get {
@@ -51,9 +52,8 @@ public struct Cache<Value: Cacheable>: SerializedCache & CacheWrapper where Valu
 }
 
 extension Cache {
-
     /// Intializes a serialized cache that is encapsulated by a property wrapper.
-    public init(wrappedValue: [Value]) {
+    public init(wrappedValue: [Value] = []) {
         self = Self.shared
         try? Self.add(wrappedValue)
     }
@@ -63,7 +63,7 @@ extension Cache {
 
     // MARK: - Subscripting
 
-    /// A subscript for looking up and setting a `Value` that comforms to `CustomCodable` & `Identifiable`.
+    /// A subscript for looking up and setting a `Value` that comforms to `AutoCodable` & `Identifiable`.
     /// - parameter id: The object's UUID for decoding and encoding.
     public static subscript (id: Value.ID) -> Value? {
         get {
@@ -107,7 +107,7 @@ extension Cache {
     enum Error<Value>: LocalizedError {
         case read(description: String), write(description: String)
 
-        static var prefix: String { "Cache.\(Self.self): " }
+        static var prefix: String { "\(Self.self): " }
 
         var failureReason: String? {
             switch self {

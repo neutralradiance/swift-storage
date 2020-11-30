@@ -8,10 +8,7 @@
 import SwiftUI
 
 /// A property wrapper for dynamically caching objects.
-public protocol CacheWrapper: BaseCache, DynamicProperty {
-    var wrappedValue: [Value] { get set }
-    var projectedValue: Binding<[Value]> { get }
-}
+public protocol CacheWrapper: StorageWrapper, BaseCache {}
 
 extension CacheWrapper {
     public func clear() throws {
