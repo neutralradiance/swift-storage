@@ -97,8 +97,8 @@ extension News: Infallible {
 ### Initializing property wrappers 
 `Codable` property wrapper for  `UserDefaults` 
 ```swift
-@Storage("currentIssue") var news: News = .defaultValue
-@Storage.Set("allIssues") var issues: [News] = [.defaultValue]
+@Store("currentIssue") var news: News = .defaultValue
+@Store.Set("allIssues") var issues: [News] = [.defaultValue]
 ```
 Property wrapper for caching `Codable` objects
 ```swift
