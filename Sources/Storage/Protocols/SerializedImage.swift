@@ -48,7 +48,7 @@ extension SerializedImage {
             self.expiration = Date(timeIntervalSinceReferenceDate: expiration)
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {}
 }
 

@@ -12,8 +12,7 @@ import SwiftUI
 /// - parameter : `Value` for caching
 /// - parameter : `wrappedValue: [Value]` the initial components to be cached
 @propertyWrapper
-public struct Cache<Value: Cacheable>:
-    SerializedCache & CacheWrapper where Value.ID == UUID,
+public struct Cache<Value: Cacheable>: SerializedCache & CacheWrapper where Value.ID == UUID,
                                          Value.AutoDecoder.Input == Data,
                                          Value.AutoEncoder.Output == Data {
 
