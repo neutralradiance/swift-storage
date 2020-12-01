@@ -1,24 +1,62 @@
 # Storage
-
-A set of easy and simple to use persistence property wrappers for `Codable` objects . 
+A set of easy and simple to use persistence property wrappers for for `Codable` objects .  
 Storage allows you to cache objects using universally unique identifiers (UUIDs) and also encode and decode into `UserDefaults` with the use of property wrappers.  
+Now supports `CloudKit`/`CoreData` storage.
 
-### Stating Conformance
+## CloudKit Storage
+### Creating Keys for `Cloud` property wrappers
+```swift
+/// A key for accessing a `CloudEntity`.
+extension CloudKey {
+    static var items: Self<Item> { .init() }
+}
+
+/// The location for cloud key lookup.
+/// It must be an extension of `CloudContainer`
+extension CloudContainer {
+    var items: Set<Item> {
+        get { self[.items] }
+        set { self[.items] = newValue }
+    }
+}
+```
+- **All objects that use `Cloud`  property wrapper must conform to `CloudEntity`**
+- **Have a `CoreData` model name specified in the `CloudContainer`.
+Defaults to "BaseModel" with the static property `CloudContainer.base`**
+- **and have a `CoreData` model with name matching a matching `CloudContainer.name` property**
+
+```swift
+static let model = CloudContainer(named: "ItemModel")
+```
+### Using keys to access `Cloud` property wrappers
+```swift
+// default
+@Published var cloud: CloudContainer = .base
+lazy var context = cloud.container.viewContext
+@Cloud(\.items) var items: Set<Item>
+
+// or custom model
+@Published var cloud: CloudContainer = model
+lazy var context = cloud.container.viewContext
+@Cloud(\.items, container: cloud) var items: Set<Item>
+```
+
+## Local Storage
+### Stating Conformance To AutoCodable
 ```swift
 /// An object that will be encoded/decoded in default JSON format.
-protocol JSONCodable: CustomCodable {}
+protocol JSONCodable: AutoCodable {}
 
 extension JSONCodable {
     static var decoder: JSONDecoder { JSONDecoder() }
     static var encoder: JSONEncoder { JSONEncoder() }
 }
 ```
-
-### Creating `CustomCodable` objects
+### Creating AutoCodable objects
 ```swift
 /// An article in a newspaper.
 struct Article: JSONCodable, Cacheable {
-    var id: UUID /// id for conforming to `Cacheable` aka `Identifiable` & `CustomCodable`
+    var id: UUID /// id for conforming to `Cacheable` aka `Identifiable` & `AutoCodable`
     var author: String
     var title: String
     var body: String
@@ -26,7 +64,7 @@ struct Article: JSONCodable, Cacheable {
 }
 
 /// Conformance to `Infallible` to make it easier to unwrap values from `UserDefaults`
-/// (especially useful when offline or generating random data)
+/// (especially useful when  for offline testing.)
 extension Article: Infallible {
     static var defaultValue: Article {
         Article(id: UUID(),
@@ -57,13 +95,11 @@ extension News: Infallible {
 }
 ```
 ### Initializing property wrappers 
-
 `Codable` property wrapper for  `UserDefaults` 
 ```swift
 @Storage("currentIssue") var news: News = .defaultValue
 @Storage.Set("allIssues") var issues: [News] = [.defaultValue]
 ```
-
 Property wrapper for caching `Codable` objects
 ```swift
 /// optional typealias for a static `Cache` with the associated type `Article`
@@ -72,20 +108,19 @@ typealias ArticleCache = Cache<Article> // ready for caching
 /// Dynamic property wrapper
 @ArticleCache var articles: [Article] = []
 ```
-
 Creating an image cache that conforms to `Codable`
 ```swift
-struct AvatarImage: SerializedImage, CustomCodable, Identifiable {
+struct AvatarImage: SerializedImage, AutoCodable, Identifiable {
     var id: UUID = UUID()
     var image: UIImage?
     var timestamp: Date?
     var expiration: Date?
     
-    /// Custom decoder for images
+    /// Auto decoder for images
     static var decoder: ImageDecoder {
         ImageDecoder()
     }
-    /// Custom encoder for images with a customizable encoding strategy
+    /// Auto encoder for images with a Autoizable encoding strategy
     static var encoder: ImageEncoder {
         let encoder = ImageEncoder()
         encoder.encodingStrategy = .jpeg(0)
@@ -93,9 +128,7 @@ struct AvatarImage: SerializedImage, CustomCodable, Identifiable {
     }
 }
 ```
-
 Then use it with any of the above property wrappers:
-
 Statically,
 ```swift
 typealias AvatarCache = Cache<AvatarImage>
