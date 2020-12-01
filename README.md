@@ -21,9 +21,8 @@ extension CloudContainer {
 }
 ```
 - **All objects that use `Cloud`  property wrapper must conform to `CloudEntity`**
-- **Have a `CoreData` model name specified in the `CloudContainer`.
-Defaults to "BaseModel" with the static property `CloudContainer.base`**
-- **and have a `CoreData` model with name matching a matching `CloudContainer.name` property**
+- **Have a `CoreData` model name specified in the `CloudContainer`, which defaults to "BaseModel" with the static property `CloudContainer.base`**
+- **and have a `CoreData` model with name matching `CloudContainer.name` property**
 
 ```swift
 static let model = CloudContainer(named: "ItemModel")
