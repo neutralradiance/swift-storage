@@ -10,7 +10,7 @@ import CoreData
 
 public class CloudContainer: ObservableObject {
     @Published public var isLoading: Bool = false
-
+    public var shouldReset: Bool
     public var name: String
     public var inMemory: Bool
 
@@ -22,6 +22,7 @@ public class CloudContainer: ObservableObject {
 
     public lazy var container: NSPersistentCloudKitContainer = {
         let container = NSPersistentCloudKitContainer(name: name)
+        if shouldReset { }
         load {
             if self.inMemory {
                 container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
@@ -37,14 +38,14 @@ public class CloudContainer: ObservableObject {
         return container
     }()
 
-    public subscript<T>(key: T.Type) -> Set<T> where T: NSManagedObject {
+    public subscript<T>(key: T.Type) -> [T] where T: NSManagedObject {
         get {
-            var results: Set<T> = []
+            var results: [T] = []
             load {
                 if let fetchRequest =  T.fetchRequest() as? NSFetchRequest<T> {
                     let context = self.container.viewContext
                     do {
-                        results = try Set(context.fetch(fetchRequest))
+                        results = try context.fetch(fetchRequest)
                     } catch {
                         debugPrint(error.localizedDescription)
                     }
@@ -62,12 +63,13 @@ public class CloudContainer: ObservableObject {
             }
         }
     }
-    public subscript<T>(key: CloudKey<T>) -> Set<T> where T: NSManagedObject {
+    public subscript<T>(key: CloudKey<T>) -> [T] where T: NSManagedObject {
         get { self[T.self] }
         set { self[T.self] = newValue }
     }
 
-    public init(inMemory: Bool = false, named name: String = "BaseModel") {
+    public init(inMemory: Bool = false, shouldReset: Bool = false, named name: String = "BaseModel") {
+        self.shouldReset = shouldReset
         self.inMemory = inMemory
         self.name = name
     }

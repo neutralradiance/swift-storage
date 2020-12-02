@@ -17,7 +17,7 @@ public extension CloudEntity {
         Cloud<Self>(\.[key])
     }
 
-    static var store: Set<Self> {
+    static var store: [Self] {
         get { _store.wrappedValue }
         set { _store.wrappedValue = newValue }
     }
@@ -26,14 +26,26 @@ public extension CloudEntity {
         get { Self.store.first(where: { $0 === value }) }
         set {
             // if existing
-            if let existing = store.first(where: { $0 === value }) {
-                if let value = newValue { store.insert(value) } else {
-                    store.remove(existing)
+            if let index = store.firstIndex(where: { $0 === value }) {
+                if let value = newValue {
+                    store.insert(value, at: index)
+                } else {
+                    store.remove(at: index)
                 }
                 // if non-existent
             } else if let value = newValue {
-                store.insert(value)
+                store.append(value)
             }
+// MARK: - Set Method -
+//            // if existing
+//            if let existing = store.first(where: { $0 === value }) {
+//                if let value = newValue { store.insert(value) } else {
+//                    store.remove(existing)
+//                }
+//                // if non-existent
+//            } else if let value = newValue {
+//                store.insert(value)
+//            }
         }
     }
 }

@@ -7,36 +7,36 @@
 
 import SwiftUI
 import CoreData
+import Algorithms
 
 @dynamicMemberLookup
 @propertyWrapper
 public struct Cloud<Value>: DynamicProperty where Value: NSManagedObject {
     let container: CloudContainer
-    let path: WritableKeyPath<CloudContainer, Set<Value>>
+    let path: WritableKeyPath<CloudContainer, [Value]>
 
-    public var wrappedValue: Set<Value> {
+    public var wrappedValue: [Value] {
         get { container[keyPath: path] }
-        nonmutating set { container[Value.self].formUnion(newValue) }
+        nonmutating set {
+            container[Value.self] =
+                container[Value.self]+newValue.uniqued()
+        }
     }
 
-    public var projectedValue: Binding<Set<Value>> {
-        Binding<Set<Value>>(
+    public var projectedValue: Binding<[Value]> {
+        Binding<[Value]>(
             get: { self.wrappedValue },
             set: { self.wrappedValue = $0 }
         )
     }
 
-    public subscript(dynamicMember member: WritableKeyPath<CloudContainer, Set<Value>>) -> Set<Value> {
+    public subscript(dynamicMember member: WritableKeyPath<CloudContainer, [Value]>) -> [Value] {
         get { self.wrappedValue }
         set { self.wrappedValue = newValue }
     }
-//    @inlinable init(wrappedValue: [Value] = [], key: Key) {
-//        self.key = key
-//        guard CloudContainer.shared[key].isEmpty else { return }
-//        self.wrappedValue = wrappedValue
-//    }
-    public init(wrappedValue: Set<Value> = [],
-                _ path: WritableKeyPath<CloudContainer, Set<Value>>, container: CloudContainer = .base, inMemory: Bool? = nil) {
+    
+    public init(wrappedValue: [Value] = [],
+                _ path: WritableKeyPath<CloudContainer, [Value]>, container: CloudContainer = .base, inMemory: Bool? = nil) {
         self.container = container
         if let inMemory = inMemory {
             container.inMemory = inMemory
