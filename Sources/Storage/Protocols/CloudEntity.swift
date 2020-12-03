@@ -13,39 +13,34 @@ public extension CloudEntity {
     static var key: CloudKey<Self> {
         CloudKey<Self>()
     }
-    static var _store: Cloud<Self> {
-        Cloud<Self>(\.[key])
+    static func _store(for container: CloudContainer = .base) -> Cloud<Self> {
+        Cloud<Self>(\.[key], container: container)
     }
 
-    static var store: [Self] {
-        get { _store.wrappedValue }
-        set { _store.wrappedValue = newValue }
+    static subscript(for container: CloudContainer = .base) -> [Self] {
+        get { _store(for: container).wrappedValue }
+        set { _store(for: container).wrappedValue = newValue }
     }
 
-    static subscript(_ value: Self.Type) -> Self? {
-        get { Self.store.first(where: { $0 === value }) }
+    static subscript(_ value: Self, for container: CloudContainer) -> Self? {
+        get { Self[for: container].first(where: { $0 == value }) }
         set {
-            // if existing
-            if let index = store.firstIndex(where: { $0 === value }) {
-                if let value = newValue {
-                    store.insert(value, at: index)
-                } else {
-                    store.remove(at: index)
-                }
-                // if non-existent
-            } else if let value = newValue {
-                store.append(value)
+            let context = container.container.viewContext
+            if let value = newValue {
+                context.insert(value)
+            } else {
+                context.delete(value)
             }
-// MARK: - Set Method -
-//            // if existing
-//            if let existing = store.first(where: { $0 === value }) {
-//                if let value = newValue { store.insert(value) } else {
-//                    store.remove(existing)
-//                }
-//                // if non-existent
-//            } else if let value = newValue {
-//                store.insert(value)
-//            }
+            //// MARK: - Set Method -
+            //            // if existing
+            //            if let existing = store.first(where: { $0 === value }) {
+            //                if let value = newValue { store.insert(value) } else {
+            //                    store.remove(existing)
+            //                }
+            //                // if non-existent
+            //            } else if let value = newValue {
+            //                store.insert(value)
+            //            }
         }
     }
 }

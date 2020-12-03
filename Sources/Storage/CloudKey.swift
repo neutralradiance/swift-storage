@@ -7,6 +7,6 @@
 
 import CoreData
 
-public struct CloudKey<Value>: Hashable where Value: NSManagedObject {
+public struct CloudKey<Value>: Hashable where Value: CloudEntity {
     public init() {}
 }

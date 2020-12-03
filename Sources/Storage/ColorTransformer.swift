@@ -7,13 +7,19 @@
 
 import SwiftUI
 
+#if os(macOS)
+typealias NativeColor = NSColor
+#elseif os(iOS)
+typealias NativeColor = UIColor
+#endif
+
 @objc(ColorTransformer)
 public final class ColorTransformer: NSSecureUnarchiveFromDataTransformer {
 
     public static let name = NSValueTransformerName(rawValue: String(describing: ColorTransformer.self))
 
     public override static var allowedTopLevelClasses: [AnyClass] {
-        return [UIColor.self]
+        return [NativeColor.self]
     }
 
     public static func register() {

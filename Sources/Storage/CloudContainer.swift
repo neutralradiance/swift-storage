@@ -38,7 +38,7 @@ public class CloudContainer: ObservableObject {
         return container
     }()
 
-    public subscript<T>(key: T.Type) -> [T] where T: NSManagedObject {
+    public subscript<T>(key: T.Type) -> [T] where T: CloudEntity {
         get {
             var results: [T] = []
             load {
@@ -56,6 +56,9 @@ public class CloudContainer: ObservableObject {
         set {
             load {
                 do {
+                    newValue.forEach { value in
+                        T[value, for: self] = value
+                    }
                     try self.container.viewContext.save()
                 } catch {
                     debugPrint(error.localizedDescription)
@@ -63,7 +66,7 @@ public class CloudContainer: ObservableObject {
             }
         }
     }
-    public subscript<T>(key: CloudKey<T>) -> [T] where T: NSManagedObject {
+    public subscript<T>(key: CloudKey<T>) -> [T] where T: CloudEntity {
         get { self[T.self] }
         set { self[T.self] = newValue }
     }

@@ -11,7 +11,7 @@ import Algorithms
 
 @dynamicMemberLookup
 @propertyWrapper
-public struct Cloud<Value>: DynamicProperty where Value: NSManagedObject {
+public struct Cloud<Value>: DynamicProperty where Value: CloudEntity {
     let container: CloudContainer
     let path: WritableKeyPath<CloudContainer, [Value]>
 
