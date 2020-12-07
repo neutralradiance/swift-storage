@@ -56,9 +56,7 @@ public class CloudContainer: ObservableObject {
         set {
             load {
                 do {
-                    newValue.forEach { value in
-                        T[value, for: self] = value
-                    }
+                    // TODO: Improve implementation to delete, insert, etc.
                     try self.container.viewContext.save()
                 } catch {
                     debugPrint(error.localizedDescription)
