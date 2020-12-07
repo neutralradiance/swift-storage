@@ -16,8 +16,8 @@ let package = Package(
             targets: ["Storage"])
     ],
     dependencies: [
-         .package(url: "https://github.com/neutralradiance/swift-unwrap.git", from: "1.0.0"),
-                  .package(url: "https://github.com/apple/swift-algorithms.git", from: "0.0.2")
+         .package(url: "https://github.com/neutralradiance/swift-unwrap.git", .branch("master")),
+                  .package(url: "https://github.com/apple/swift-algorithms.git", .branch("master"))
          
     ],
     targets: [
