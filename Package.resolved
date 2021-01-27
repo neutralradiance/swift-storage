@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "swift-algorithms",
+        "repositoryURL": "https://github.com/apple/swift-algorithms.git",
+        "state": {
+          "branch": "main",
+          "revision": "d872b648f44190ccd51a70c41dff17d04ee7c452",
+          "version": null
+        }
+      },
+      {
+        "package": "swift-numerics",
+        "repositoryURL": "https://github.com/apple/swift-numerics",
+        "state": {
+          "branch": null,
+          "revision": "6b24333510e9044cf4716a07bed65eeed6bc6393",
+          "version": "0.0.8"
+        }
+      },
+      {
+        "package": "Unwrap",
+        "repositoryURL": "https://github.com/neutralradiance/swift-unwrap.git",
+        "state": {
+          "branch": "master",
+          "revision": "034469abc930f730c8167bdceb6e5712b8b90dad",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
