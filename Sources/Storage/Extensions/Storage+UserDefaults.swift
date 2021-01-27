@@ -8,8 +8,8 @@
 import Foundation
 
 public extension UserDefaults {
-    func clearAll() {
-        dictionaryRepresentation().keys
-            .forEach { removeObject(forKey: $0) }
-    }
+	func clearAll() {
+		dictionaryRepresentation().keys
+			.forEach { removeObject(forKey: $0) }
+	}
 }
