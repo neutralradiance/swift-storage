@@ -12,10 +12,7 @@ public typealias Cacheable = Identifiable & AutoCodable
 
 public protocol SerializedCache:
 	BaseCache where Value: Cacheable,
-	Value.ID == UUID,
-	Value.AutoDecoder.Input == Data,
-	Value.AutoEncoder.Output == Data
-{
+	Value.ID == UUID {
 	static subscript(_: Value.ID) -> Value? { get set }
 }
 
