@@ -19,7 +19,7 @@ public extension Store {
 		public var wrappedValue: [Value] {
 			get {
 				do {
-					if let data = store.object(forKey: key) as? [Value.AutoDecoder.Input] {
+					if let data = store.object(forKey: key) as? [Data] {
 						return try Value.decoder.decode(Value.self, fromArray: data)
 					}
 					return []
@@ -45,7 +45,8 @@ public extension Store {
 				}
 			}
 		}
-
+		
+		@available(iOS 13.0, *)
 		public var projectedValue: Binding<[Value]> {
 			Binding<[Value]>(
 				get: { self.wrappedValue },

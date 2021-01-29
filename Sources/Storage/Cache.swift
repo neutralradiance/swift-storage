@@ -13,10 +13,7 @@ import SwiftUI
 /// - parameter : `wrappedValue: [Value]` the initial components to be cached
 @propertyWrapper
 public struct Cache<Value: Cacheable>:
-	SerializedCache & CacheWrapper where Value.ID == UUID,
-	Value.AutoDecoder.Input == Data,
-	Value.AutoEncoder.Output == Data
-{
+	SerializedCache & CacheWrapper where Value.ID == UUID {
 	public var wrappedValue: [Value] {
 		get {
 			do {
@@ -52,7 +49,8 @@ public struct Cache<Value: Cacheable>:
 			}
 		}
 	}
-
+	
+	@available(iOS 13.0, *)
 	public var projectedValue: Binding<[Value]> {
 		Binding<[Value]>(
 			get: { self.wrappedValue },

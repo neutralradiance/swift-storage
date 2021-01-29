@@ -17,6 +17,7 @@ public struct Storage<Value>: DefaultsWrapper where Value: Infallible {
 		nonmutating set { store.set(newValue, forKey: key) }
 	}
 
+	@available(iOS 13.0, *)
 	public var projectedValue: Binding<Value> {
 		Binding<Value>(
 			get: { self.wrappedValue },

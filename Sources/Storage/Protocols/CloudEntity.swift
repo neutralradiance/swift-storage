@@ -9,6 +9,7 @@ import CoreData
 
 public protocol CloudEntity: NSManagedObject {}
 
+@available(iOS 13, macOS 10.15, *)
 public extension CloudEntity {
 	static var key: CloudKey<Self> {
 		CloudKey<Self>()

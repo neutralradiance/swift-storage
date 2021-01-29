@@ -18,6 +18,7 @@ public extension Storage {
 			nonmutating set { store.set(newValue, forKey: key) }
 		}
 
+		@available(iOS 13.0, *)
 		public var projectedValue: Binding<[Storage.Value]> {
 			Binding<[Storage.Value]>(
 				get: { self.wrappedValue },

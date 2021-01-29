@@ -8,6 +8,7 @@
 import CoreData
 import SwiftUI
 
+@available(iOS 13, macOS 10.15, *)
 public class CloudContainer: ObservableObject {
 	@Published public var isLoading: Bool = false
 	public var shouldReset: Bool
@@ -95,6 +96,7 @@ public class CloudContainer: ObservableObject {
 	}
 }
 
+@available(iOS 13, macOS 10.15, *)
 public extension CloudContainer {
 	static let base = CloudContainer()
 }

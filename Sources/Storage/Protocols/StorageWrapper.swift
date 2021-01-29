@@ -9,6 +9,7 @@ import SwiftUI
 
 public protocol StorageWrapper: BaseStorage, DynamicProperty {
 	var wrappedValue: [Value] { get nonmutating set }
+	@available(iOS 13.0, *)
 	var projectedValue: Binding<[Value]> { get }
 }
 

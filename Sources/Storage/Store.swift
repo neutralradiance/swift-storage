@@ -18,7 +18,7 @@ public struct Store<Value: AutoCodable>: DefaultsWrapper {
 		get {
 			do {
 				guard let data =
-					store.object(forKey: key) as? Value.AutoDecoder.Input
+					store.object(forKey: key) as? Data
 				else {
 					return nil
 				}
@@ -45,7 +45,7 @@ public struct Store<Value: AutoCodable>: DefaultsWrapper {
 			}
 		}
 	}
-
+	@available(iOS 13.0, *)
 	public var projectedValue: Binding<Value?> {
 		Binding<Value?>(
 			get: { self.wrappedValue },
@@ -105,7 +105,7 @@ extension Store: AutoCodable {
 	public init(from decoder: Decoder) throws {
 		try self.init(from: decoder)
 		if let data =
-			store.data(forKey: key) as? Value.AutoDecoder.Input
+			store.data(forKey: key)
 		{
 			wrappedValue =
 				try Self.decoder.decode(Value.self, from: data)

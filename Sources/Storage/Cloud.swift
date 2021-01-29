@@ -9,6 +9,7 @@ import Algorithms
 import CoreData
 import SwiftUI
 
+@available(iOS 13, macOS 10.15, *)
 @dynamicMemberLookup
 @propertyWrapper
 public struct Cloud<Value>: DynamicProperty where Value: CloudEntity {
