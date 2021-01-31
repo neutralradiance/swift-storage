@@ -11,7 +11,7 @@ import SwiftUI
 public protocol CacheWrapper: StorageWrapper, BaseCache {}
 
 public extension CacheWrapper {
-	func clear() throws {
-		try Self.clear()
-	}
+  func clear() throws {
+    try Self.clear()
+  }
 }
