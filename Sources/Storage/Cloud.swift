@@ -10,7 +10,6 @@ import CoreData
 import SwiftUI
 
 @available(iOS 13, macOS 10.15, *)
-@dynamicMemberLookup
 @propertyWrapper
 public final class Cloud<Value>:
   DynamicProperty,
@@ -20,9 +19,9 @@ where Value: CloudEntity {
   var container: CloudContainer = .base {
     willSet { objectWillChange.send() }
   }
-  let path: WritableKeyPath<CloudContainer, [Value]>
+  let path: KeyPath<CloudContainer, CloudKey<Value>>
   public var wrappedValue: [Value] {
-    get { container[keyPath: path] }
+    get { container[Value.self] }
     set {
       container[Value.self] =
         container[Value.self] + newValue.uniqued()
@@ -36,19 +35,12 @@ where Value: CloudEntity {
     )
   }
 
-  public subscript(
-    dynamicMember _: WritableKeyPath<CloudContainer, [Value]>
-  ) -> [Value] {
-    get { wrappedValue }
-    set { wrappedValue = newValue }
-  }
-
   public init(
     wrappedValue: [Value] = [],
-    _ path: WritableKeyPath<CloudContainer, [Value]>
+    _ path: KeyPath<CloudContainer, CloudKey<Value>>
   ) {
     self.path = path
-    guard self.container[keyPath: path].isEmpty else { return }
+    guard self.container[Value.self].isEmpty else { return }
     self.wrappedValue = wrappedValue
   }
 }

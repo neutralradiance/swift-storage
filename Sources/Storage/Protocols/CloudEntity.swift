@@ -11,21 +11,11 @@ public protocol CloudEntity: NSManagedObject {}
 
 @available(iOS 13, macOS 10.15, *)
 public extension CloudEntity {
-  static var key: CloudKey<Self> {
-    CloudKey<Self>()
-  }
-
-  static func _store(
-    for container: CloudContainer = .base
-  ) -> Cloud<Self> {
-    Cloud<Self>(\.[key])
-  }
-
   static subscript(
     for container: CloudContainer = .base
   ) -> [Self] {
-    get { _store(for: container).wrappedValue }
-    set { _store(for: container).wrappedValue = newValue }
+    get { container[Self.self] }
+    set { container[Self.self] = newValue }
   }
 
   static subscript(
