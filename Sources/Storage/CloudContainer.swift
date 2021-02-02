@@ -10,7 +10,9 @@ import SwiftUI
 
 @available(iOS 13, macOS 10.15, *)
 public class CloudContainer: ObservableObject {
-  @Published public var isLoading: Bool = false
+  @Published public var isLoading: Bool = false {
+    willSet { objectWillChange.send() }
+  }
   public var shouldReset: Bool
   public var name: String
   public var inMemory: Bool

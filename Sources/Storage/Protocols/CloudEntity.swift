@@ -18,7 +18,7 @@ public extension CloudEntity {
   static func _store(
     for container: CloudContainer = .base
   ) -> Cloud<Self> {
-    Cloud<Self>(\.[key], container: container)
+    Cloud<Self>(\.[key])
   }
 
   static subscript(
