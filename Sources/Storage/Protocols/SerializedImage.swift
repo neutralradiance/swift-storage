@@ -11,10 +11,10 @@
   /// A class for cached images that can be used with `Cache` after
   ///  conforming to `Cacheable`.
   open class SerializedImage: AutoCodable {
-    var id = UUID()
-    var image: UIImage? = .none
-    var timestamp: Date? = .none
-    var expiration: Date? = .none
+    public var id = UUID()
+    public var image: UIImage? = .none
+    public var timestamp: Date? = .none
+    public var expiration: Date? = .none
     public convenience init(
       id: UUID,
       image: UIImage,
