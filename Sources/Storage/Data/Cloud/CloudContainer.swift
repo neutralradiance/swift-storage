@@ -13,6 +13,7 @@ public class CloudContainer: ObservableObject {
   @Published public var isLoading: Bool = false {
     willSet { objectWillChange.send() }
   }
+
   public var shouldReset: Bool
   public var name: String
   public var inMemory: Bool

@@ -14,12 +14,12 @@ public protocol SettingsKey: Hashable, CustomStringConvertible {
   init()
 }
 
-extension SettingsKey {
-  public var description: String {
-    return String(describing: Self.self)
+public extension SettingsKey {
+  var description: String {
+    String(describing: Self.self)
   }
 }
 
-extension SettingsKey where Value: Infallible {
-  public static var defaultValue: Value { return .defaultValue }
+public extension SettingsKey where Value: Infallible {
+  static var defaultValue: Value { .defaultValue }
 }

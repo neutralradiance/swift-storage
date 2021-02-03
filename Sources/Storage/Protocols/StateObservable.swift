@@ -12,8 +12,8 @@ public protocol StateObservable: ObservableObject {
   var state: PublisherState { get set }
 }
 
-extension StateObservable {
-  public func update(
+public extension StateObservable {
+  func update(
     _ state: PublisherState = .change,
     _ void: @escaping () throws -> Void
   ) {

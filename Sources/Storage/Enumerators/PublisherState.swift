@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum PublisherState {
+public enum PublisherState: String {
   case
     initialize,
     change,

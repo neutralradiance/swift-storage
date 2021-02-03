@@ -43,7 +43,7 @@ public extension UserDefaults {
 //  }
 //
   func value<Key: SettingsKey>(for key: Key) -> Key.Value
-  where Key.Value: AutoCodable {
+    where Key.Value: AutoCodable {
     if let data =
       (value(forKey: key.description) as? Key.Value.AutoDecoder.Input),
       let value = try? Key.Value.decoder
@@ -54,7 +54,7 @@ public extension UserDefaults {
   }
 
   func set<Key: SettingsKey>(_ value: Key.Value?, for key: Key)
-  where Key.Value: AutoCodable {
+    where Key.Value: AutoCodable {
     try? setValue(value?.encoded(), forKey: key.description)
   }
 }

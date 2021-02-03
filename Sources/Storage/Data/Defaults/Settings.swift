@@ -14,6 +14,7 @@ public class Settings: StateObservable {
   public var state: PublisherState = .initialize {
     willSet { objectWillChange.send() }
   }
+
   public let defaults: UserDefaults
 
   public subscript<Key: SettingsKey>(

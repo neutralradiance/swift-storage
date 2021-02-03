@@ -14,11 +14,12 @@ import SwiftUI
 public final class Cloud<Value>:
   DynamicProperty,
   ObservableObject
-where Value: CloudEntity {
+  where Value: CloudEntity {
   @Published
   var container: CloudContainer = .base {
     willSet { objectWillChange.send() }
   }
+
   let path: KeyPath<CloudContainer, CloudKey<Value>>
   public var wrappedValue: [Value] {
     get { container[Value.self] }
@@ -40,7 +41,7 @@ where Value: CloudEntity {
     _ path: KeyPath<CloudContainer, CloudKey<Value>>
   ) {
     self.path = path
-    guard self.container[Value.self].isEmpty else { return }
+    guard container[Value.self].isEmpty else { return }
     self.wrappedValue = wrappedValue
   }
 }
