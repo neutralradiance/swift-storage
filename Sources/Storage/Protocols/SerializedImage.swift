@@ -8,31 +8,28 @@
 #if os(iOS)
   import UIKit
 
-  /// A protocol for cached images that can be used with `Cache` after conforming to `Cacheable`.
-  public protocol SerializedImage: Codable {
-    var id: UUID { get set }
-    var image: UIImage? { get set }
-    var timestamp: Date? { get set }
-    var expiration: Date? { get set }
-    init()
-  }
-
-  public extension SerializedImage {
-    init(
+  /// A class for cached images that can be used with `Cache` after
+  ///  conforming to `Cacheable`.
+  open class SerializedImage: AutoCodable {
+    var id = UUID()
+    var image: UIImage? = .none
+    var timestamp: Date? = .none
+    var expiration: Date? = .none
+    public convenience init(
       id: UUID,
       image: UIImage,
       timestamp: Date? = nil,
       expiration: Date? = nil
     ) {
-      self.init()
+      try! self.init(from: Self.decoder as! Decoder)
       self.id = id
       self.image = image
       self.timestamp = timestamp
       self.expiration = expiration
     }
 
-    init(from decoder: Decoder) throws {
-      self.init()
+    public required init(from decoder: Decoder) throws {
+//      self.init()
       let container =
         try decoder.container(keyedBy: SerializedImageKey.self)
       let data =
@@ -69,7 +66,9 @@
       }
     }
 
-    func encode(to _: Encoder) throws {}
+    public func encode(to _: Encoder) throws {}
+    public static let encoder = ImageEncoder()
+    public static let decoder = ImageDecoder()
   }
 
   /// Coding key for encoding / decoding a `SerializedImage`
