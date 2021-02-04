@@ -15,19 +15,6 @@
     public var image: UIImage? = .none
     public var timestamp: Date? = .none
     public var expiration: Date? = .none
-    public convenience init(
-      id: UUID,
-      image: UIImage,
-      timestamp: Date? = nil,
-      expiration: Date? = nil
-    ) {
-      try! self.init(from: Self.decoder as! Decoder)
-      self.id = id
-      self.image = image
-      self.timestamp = timestamp
-      self.expiration = expiration
-    }
-
     public required init(from decoder: Decoder) throws {
       let container =
         try decoder.container(keyedBy: SerializedImageKey.self)
@@ -70,6 +57,21 @@
     public static let decoder = ImageDecoder()
     override open var classForCoder: AnyClass {
       Self.AutoDecoder
+    }
+  }
+
+  public extension SerializedImage {
+    convenience init(
+      id: UUID = UUID(),
+      image: UIImage = UIImage(),
+      timestamp: Date? = nil,
+      expiration: Date? = nil
+    ) throws {
+      try self.init()
+      self.id = id
+      self.image = image
+      self.timestamp = timestamp
+      self.expiration = expiration
     }
   }
 
