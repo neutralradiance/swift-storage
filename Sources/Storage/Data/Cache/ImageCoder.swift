@@ -15,7 +15,7 @@ import Combine
 #if os(iOS)
   /// Decoder for an image that decodes data that can be encoded by `ImageEncoder`
   /// Uses `JSONDecoder` to decode base64 data for images and provide extra data.
-  public class ImageDecoder: TopLevelDecoder {
+  open class ImageDecoder: TopLevelDecoder {
     public func decode<T>(
       _ type: T.Type, from data: Data
     ) throws -> T where T: Decodable {
@@ -38,7 +38,7 @@ import Combine
 
   /// Encoder for an image that encodes data that can be decoded by `ImageDecoder`
   /// Uses `JSONSerialization` to encode base64 data for images and store extra data.
-  public class ImageEncoder: TopLevelEncoder {
+  open class ImageEncoder: TopLevelEncoder {
     public var encodingStrategy: EncodingStrategy = .png
     public func encode<T>(_ value: T) throws -> Data where T: Encodable {
       guard let object = value as? SerializedImage,

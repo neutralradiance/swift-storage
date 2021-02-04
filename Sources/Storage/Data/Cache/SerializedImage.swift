@@ -10,7 +10,7 @@
 
   /// A class for cached images that can be used with `Cache` after
   ///  conforming to `Cacheable`.
-  open class SerializedImage: AutoCodable {
+  open class SerializedImage: NSObject, AutoCodable {
     public var id = UUID()
     public var image: UIImage? = .none
     public var timestamp: Date? = .none
@@ -29,7 +29,6 @@
     }
 
     public required init(from decoder: Decoder) throws {
-//      self.init()
       let container =
         try decoder.container(keyedBy: SerializedImageKey.self)
       let data =
@@ -69,6 +68,9 @@
     public func encode(to _: Encoder) throws {}
     public static let encoder = ImageEncoder()
     public static let decoder = ImageDecoder()
+    override open var classForCoder: AnyClass {
+      Self.AutoDecoder
+    }
   }
 
   /// Coding key for encoding / decoding a `SerializedImage`
