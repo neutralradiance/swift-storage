@@ -18,7 +18,7 @@ let package = Package(
       name: "Unwrap",
       url:
       "https://github.com/neutralradiance/swift-unwrap.git",
-      .branch("master")
+      .branch("main")
     ),
     .package(
       url:
