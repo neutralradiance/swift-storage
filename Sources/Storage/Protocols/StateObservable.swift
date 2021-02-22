@@ -15,15 +15,17 @@ public protocol StateObservable: ObservableObject {
 public extension StateObservable {
   func update(
     _ state: PublisherState = .change,
-    _ void: @escaping () throws -> Void
+    deadline: DispatchTime = .now(),
+    _ perform: @escaping () throws -> Void
   ) {
-    DispatchQueue.main.async { [weak self] in
-      do {
-        try void()
-        self?.state = state
-      } catch {
-        debugPrint(error.localizedDescription)
+    DispatchQueue.main
+      .asyncAfter(deadline: deadline) { [weak self] in
+        do {
+          try perform()
+          self?.state = state
+        } catch {
+          debugPrint(error.localizedDescription)
+        }
       }
-    }
   }
 }

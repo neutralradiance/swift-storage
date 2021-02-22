@@ -9,42 +9,35 @@ import Foundation
 import SwiftUI
 
 @propertyWrapper
-public final class Setting<Key: SettingsKey>:
+public final class Setting<K>:
   DynamicProperty,
-  ObservableObject {
+  ObservableObject
+where K: SettingsKey {
+  let path: KeyPath<Settings, K>
   @Published
   public var settings: Settings = .shared {
     willSet { objectWillChange.send() }
   }
-
-  public let path: KeyPath<Settings, Key>
-  public let defaultValue: Key.Value?
-  public var wrappedValue: Key.Value {
+  public var wrappedValue: K.Value {
     get {
-      let value = settings[path]
-      return
-        defaultValue == nil ?
-        value :
-        value == Key.defaultValue ?
-        value : defaultValue!
+      return settings[K.self]
     }
-    set { settings[path] = newValue }
+    set { settings[K.self] = newValue }
   }
 
-  public var projectedValue: Binding<Key.Value> {
-    Binding<Key.Value>(
+  public var projectedValue: Binding<K.Value> {
+    Binding<K.Value>(
       get: { self.wrappedValue },
-      set: {
-        self.settings[self.path] = $0
+      set: { [weak self] in
+        self?.settings[K.self] = $0
       }
     )
   }
 
   public init(
-    wrappedValue: Key.Value? = .none,
-    _ path: KeyPath<Settings, Key>
-  ) {
-    defaultValue = wrappedValue
+    wrappedValue: K.Value = K.defaultValue,
+    _ path: KeyPath<Settings, K>
+  ) where K: SettingsKey {
     self.path = path
   }
 }

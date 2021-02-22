@@ -12,9 +12,9 @@ public typealias Cacheable = Identifiable & AutoCodable
 
 public protocol SerializedCache:
   BaseCache where Value: Cacheable,
-  Value.ID == UUID,
   Value.AutoDecoder.Input == Data,
-  Value.AutoEncoder.Output == Data {
+  Value.AutoEncoder.Output == Data,
+  Value.ID: StringProtocol {
   static subscript(_: Value.ID) -> Value? { get set }
 }
 
@@ -22,7 +22,7 @@ public extension SerializedCache {
   /// An automatically determined location for `Value`
   /// to be stored based on `UUID`.
   static func fileURL(_ id: Value.ID) throws -> URL {
-    try folder().appendingPathComponent(id.uuidString)
+    try folder().appendingPathComponent(String(id))
   }
 
   func exists(_ id: Value.ID) throws -> Bool {
@@ -48,7 +48,7 @@ public extension SerializedCache {
     let dir = try folder(createIfNeeded: true)
     try contents.forEach { value in
       let url =
-        dir.appendingPathComponent(value.id.uuidString)
+        dir.appendingPathComponent(String(value.id))
       if !fileExists(url) {
         let data = try Value.encoder.encode(value)
         try data.write(to: url)
@@ -64,7 +64,7 @@ public extension SerializedCache {
       if let commonIndex =
         directory.firstIndex(
           where:
-          { $0.lastPathComponent == value.id.uuidString }
+          { $0.lastPathComponent == String(value.id) }
         ) {
         directory.remove(at: commonIndex)
       } else {

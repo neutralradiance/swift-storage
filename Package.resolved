@@ -23,8 +23,8 @@
         "package": "Unwrap",
         "repositoryURL": "https://github.com/neutralradiance/swift-unwrap.git",
         "state": {
-          "branch": "master",
-          "revision": "034469abc930f730c8167bdceb6e5712b8b90dad",
+          "branch": "main",
+          "revision": "ea7106d4b33b8cea409c4693130112ec8db281a0",
           "version": null
         }
       }

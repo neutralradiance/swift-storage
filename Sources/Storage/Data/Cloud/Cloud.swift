@@ -5,43 +5,36 @@
 //  Created by neutralradiance on 11/25/20.
 //
 
-import Algorithms
-import CoreData
 import SwiftUI
+import Unwrap
 
-@available(iOS 13, macOS 10.15, *)
 @propertyWrapper
-public final class Cloud<Value>:
-  DynamicProperty,
-  ObservableObject
-  where Value: CloudEntity {
-  @Published
-  var container: CloudContainer = .base {
-    willSet { objectWillChange.send() }
-  }
-
-  let path: KeyPath<CloudContainer, CloudKey<Value>>
-  public var wrappedValue: [Value] {
-    get { container[Value.self] }
+public struct Cloud<Value>: DynamicProperty
+where Value: CloudEntity, Value: Infallible {
+  public let path: KeyPath<Value.Container, Value?>
+  public var wrappedValue: Value? {
+    get {
+      Value.Container.shared[Value.self] ??
+        Value.defaultValue
+    }
     set {
-      container[Value.self] =
-        container[Value.self] + newValue.uniqued()
+      Value.Container.shared[Value.self] = newValue
     }
   }
 
-  public var projectedValue: Binding<[Value]> {
-    Binding<[Value]>(
-      get: { self.wrappedValue },
-      set: { self.wrappedValue = $0 }
+  public var projectedValue: Binding<Value?> {
+    Binding<Value?>(
+      get: { wrappedValue },
+      set: {
+        Value.Container.shared[Value.self] = $0
+      }
     )
   }
 
   public init(
-    wrappedValue: [Value] = [],
-    _ path: KeyPath<CloudContainer, CloudKey<Value>>
+    wrappedValue _: Value = Value.defaultValue,
+    _ path: KeyPath<Value.Container, Value?>
   ) {
     self.path = path
-    guard container[Value.self].isEmpty else { return }
-    self.wrappedValue = wrappedValue
   }
 }

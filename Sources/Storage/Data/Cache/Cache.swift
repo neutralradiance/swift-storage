@@ -14,9 +14,9 @@ import SwiftUI
 @propertyWrapper
 public struct Cache<Value: Cacheable>:
   SerializedCache & CacheWrapper
-  where Value.ID == UUID,
-  Value.AutoDecoder.Input == Data,
-  Value.AutoEncoder.Output == Data {
+  where Value.AutoDecoder.Input == Data,
+        Value.AutoEncoder.Output == Data,
+        Value.ID: StringProtocol {
   public var wrappedValue: [Value] {
     get {
       do {

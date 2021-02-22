@@ -1,34 +1,27 @@
 //
-//  CloudContainer.swift
-//  _Name
+//  File.swift
+//  
 //
-//  Created by neutralradiance on 11/17/20.
+//  Created by William Luke on 2/5/21.
 //
 
 import CoreData
-import SwiftUI
 
-@available(iOS 13, macOS 10.15, *)
-public class CloudContainer: ObservableObject {
-  @Published public var isLoading: Bool = false {
+/*
+public final class CoreDataContainer: CloudContainer {
+  public typealias BaseClass = CoreDataObject
+  @Published
+  public var state: PublisherState = .initialize {
     willSet { objectWillChange.send() }
   }
-
   public var shouldReset: Bool
-  public var name: String
   public var inMemory: Bool
-
-  private func load(_ perform: (() -> Void)? = nil) {
-    isLoading = true
-    perform?()
-    isLoading = false
-  }
-
+  public var key: String
   public lazy var container: NSPersistentCloudKitContainer = {
     let container =
-      NSPersistentCloudKitContainer(name: name)
+      NSPersistentCloudKitContainer(name: key)
     // if shouldReset {}
-    load {
+    update(.initialize) {
       if self.inMemory {
         container.persistentStoreDescriptions.first!.url =
           URL(fileURLWithPath: "/dev/null")
@@ -49,15 +42,15 @@ public class CloudContainer: ObservableObject {
     }
     return container
   }()
-
-  public subscript<T>(
-    _: T.Type
-  ) -> [T] where T: CloudEntity {
+  
+  public subscript<BaseClass>(
+    _: BaseClass.Type
+  ) -> [BaseClass] {
     get {
-      var results: [T] = []
-      load {
+      var results: [BaseClass] = []
+      update(.load) {
         if let fetchRequest =
-          T.fetchRequest() as? NSFetchRequest<T> {
+        BaseClass.fetchRequest() as? NSFetchRequest<BaseClass> {
           let context = self.container.viewContext
           do {
             results = try context.fetch(fetchRequest)
@@ -69,8 +62,8 @@ public class CloudContainer: ObservableObject {
       return results
     }
     set {
-      load {
-        do {
+      update(.change) {
+         do {
           // TODO: Improve implementation to delete, insert, etc.
           try self.container.viewContext.save()
         } catch {
@@ -79,26 +72,14 @@ public class CloudContainer: ObservableObject {
       }
     }
   }
-
-  public subscript<T>(
-    _: CloudKey<T>
-  ) -> [T] where T: CloudEntity {
-    get { self[T.self] }
-    set { self[T.self] = newValue }
-  }
-
   public init(
     inMemory: Bool = false,
     shouldReset: Bool = false,
-    named name: String = "BaseModel"
+    key: String = "Base"
   ) {
     self.shouldReset = shouldReset
     self.inMemory = inMemory
-    self.name = name
+    self.key = key
   }
 }
-
-@available(iOS 13, macOS 10.15, *)
-public extension CloudContainer {
-  static let base = CloudContainer()
-}
+*/

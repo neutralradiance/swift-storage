@@ -10,12 +10,16 @@
 
   /// A class for cached images that can be used with `Cache` after
   ///  conforming to `Cacheable`.
-  open class SerializedImage: NSObject, AutoCodable {
-    public var id = UUID()
-    public var image: UIImage? = .none
-    public var timestamp: Date? = .none
-    public var expiration: Date? = .none
-    public required init(from decoder: Decoder) throws {
+  public protocol SerializedImage {
+    var id: String { get set }
+    var image: UIImage? { get set }
+    var timestamp: Date? { get set }
+    var expiration: Date? { get set }
+    init()
+  }
+extension SerializedImage {
+    public init(from decoder: Decoder) throws {
+      self.init()
       let container =
         try decoder.container(keyedBy: SerializedImageKey.self)
       let data =
@@ -31,7 +35,7 @@
         )
       }
 
-      id = try container.decode(UUID.self, forKey: .id)
+      self.id = try container.decode(String.self, forKey: .id)
       self.image = image
 
       if let timestamp =
@@ -52,22 +56,16 @@
       }
     }
 
-    public func encode(to _: Encoder) throws {}
-    public static let encoder = ImageEncoder()
-    public static let decoder = ImageDecoder()
-    override open var classForCoder: AnyClass {
-      Self.AutoDecoder
-    }
-  }
-
-  public extension SerializedImage {
-    convenience init(
-      id: UUID = UUID(),
-      image: UIImage = UIImage(),
+  public func encode(to _: Encoder) throws {}
+  public static var encoder: ImageEncoder { ImageEncoder.shared }
+  public static var decoder: ImageDecoder { ImageDecoder.shared }
+    public init(
+      id: String = UUID().uuidString,
+      image: UIImage? = .none,
       timestamp: Date? = nil,
       expiration: Date? = nil
-    ) throws {
-      try self.init()
+    ) {
+      self.init()
       self.id = id
       self.image = image
       self.timestamp = timestamp

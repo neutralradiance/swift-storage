@@ -7,7 +7,12 @@
 
 import CoreData
 
-public struct CloudKey<Value>: Hashable
-  where Value: CloudEntity {
-  public init() {}
+//public struct CloudKey<Value>: Hashable
+//  where Value: CloudEntity {
+//  public init() {}
+//}
+public protocol CloudKey {
+  associatedtype Value: CloudEntity
+  //static var defaultValue: Value { get }
 }
+

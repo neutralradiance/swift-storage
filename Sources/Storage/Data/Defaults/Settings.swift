@@ -17,8 +17,19 @@ public class Settings: StateObservable {
 
   public let defaults: UserDefaults
 
+
   public subscript<Key: SettingsKey>(
     _: KeyPath<Settings, Key>
+  ) -> Key.Value {
+    get { defaults[Key.self] }
+    set {
+      update { [weak self] in
+        self?.defaults[Key.self] = newValue
+      }
+    }
+  }
+  public subscript<Key: SettingsKey>(
+    _: Key.Type
   ) -> Key.Value {
     get { defaults[Key.self] }
     set {

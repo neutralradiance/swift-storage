@@ -34,6 +34,7 @@ import Combine
     }
 
     public init() {}
+    public static let shared = ImageDecoder()
   }
 
   /// Encoder for an image that encodes data that can be decoded by `ImageDecoder`
@@ -54,8 +55,10 @@ import Combine
         )
       }
 
-      var json: [String: Any] = ["image": data.base64EncodedString(),
-                                 "id": object.id.uuidString]
+      var json: [String: Any] = [
+        "id": object.id,
+        "image": data.base64EncodedString()
+        ]
 
       if let timestamp = object.timestamp {
         json.updateValue(
@@ -72,6 +75,7 @@ import Combine
     }
 
     public init() {}
+    public static let shared = ImageEncoder()
   }
 
   public extension ImageEncoder {

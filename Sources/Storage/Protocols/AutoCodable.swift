@@ -25,8 +25,8 @@ public protocol AutoEncodable: Codable {
   static var encoder: AutoEncoder { get }
 }
 
-public extension AutoEncodable {
-  func encoded() throws -> AutoEncoder.Output {
+extension AutoEncodable {
+  public func encoded() throws -> AutoEncoder.Output {
     try Self.encoder.encode(self)
   }
 }
